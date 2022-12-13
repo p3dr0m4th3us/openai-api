@@ -16,16 +16,10 @@ venom
 function start(client) {
   client.onMessage((message) => {
     if (message.body[0] === "#" && message.isGroupMsg === false) {
-        console.log(message.body)
-        console.log(String(message.body).slice(1, message.body.length))
-        console.log(message.from)
         postData(String(message.body).slice(1, message.body.length), message.from, client)
     }
   });
 }
-
-
-
 
 function postData(promptText, nmr, client){
     var openaiApiUrl = 'https://api.openai.com/v1/completions';
@@ -40,15 +34,11 @@ function postData(promptText, nmr, client){
     post({url: openaiApiUrl, json: requestData, headers:{"Authorization": "Bearer " + openaiApiKey}}, function(error, response, body) {
     if (!error && response.statusCode == 200) {
         // Imprima a resposta da API do OpenAI no console
-        console.log(body['choices'][0]['text']);
-        console.log(nmr);
         enviarMensagem(body['choices'][0]['text'], nmr, client);
     }
 });}
 
 function enviarMensagem(prompt, nmr, client){
-    console.log(prompt)
-    console.log(nmr)
         client
             .sendText(nmr, prompt)
             .then((result) => {
